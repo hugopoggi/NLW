@@ -1,11 +1,26 @@
-from barcode import Code128
-from barcode.writer import ImageWriter
+from src.views.http_types.http_response import HttpResponse
+from .error_types.http_unprocessable_entity import HttpUnprocessableEntityError
 
-class BarcodeHandler:
-    def create_barcode(self, product_code: str) -> str:
-        tag = Code128(product_code, writer=ImageWriter())
-        path_from_tag = f'{tag}'
-        tag.save(path_from_tag)
+def handle_errors(error: Exception) -> HttpResponse:
+    if isinstance(error, HttpUnprocessableEntityError):
+        # enviar para um log
+        # enviar um email de notificao
+        return HttpResponse(
+            status_code=error.status_code,
+            body={
+                "errors": [{
+                    "title": error.name,
+                    "detail": error.message
+                }]
+            }
+        )
 
-        return path_from_tag
-    
+    return HttpResponse(
+        status_code=500,
+        body={
+            "errors": [{
+                "title": "Server Error",
+                "detail": str(error)
+            }]
+        }
+    )

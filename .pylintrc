@@ -10,6 +10,10 @@ disable=
       W0201,
       W0719, 
       E0401,
+      E0602,
+      E0102,
+      E1121,
+      E1123,
 
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists
